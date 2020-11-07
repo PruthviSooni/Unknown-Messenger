@@ -28,10 +28,10 @@ This is a normal flutter app. You should follow the instructions in the [officia
 
 ## What's included
 
-* Check weather WhatsApp is install or Not 
-* Search Country Code
-* Attractive UI
-* CRUD with firesotre!
+- Check weather WhatsApp is install or Not
+- Search Country Code
+- Attractive UI
+- CRUD with firesotre!
 
 ## Firebase
 
@@ -49,7 +49,8 @@ We use Travis CI to run this tasks in order:
 Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/Ismaestro/flutter-example-app/blob/master/CONTRIBUTING.md) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/Ismaestro/flutter-example-app/issues/new). -->
 
 ## Demo
-<img src="images/demo.gif" width=250/><br>
+
+<img src="data/demo.gif" width=250/><br>
 In-Progress...
 
 ## Creators

@@ -3,9 +3,16 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
-import 'package:unknown_messenger/utils/constants.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
+
+import '../utils/constants.dart';
+import '../widgets/customAppbar.dart';
 
 class Home extends StatefulWidget {
+  static final routeName = '/Home';
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -15,11 +22,7 @@ class _HomeState extends State<Home> {
   TextEditingController _message = TextEditingController();
   GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   String _code = '+91';
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  String _msg, _num;
 
   _showSnackBar(msg) {
     _key.currentState.showSnackBar(SnackBar(
@@ -31,10 +34,19 @@ class _HomeState extends State<Home> {
     ));
   }
 
+  void insertData() async {
+    final box = Hive.box('numbers');
+    var data = {
+      'number': _num,
+      'message': _msg,
+      'timeStamp': DateTime.now().toString(),
+    };
+    box.add(data);
+  }
+
   @override
-  void dispose() {
-    _number.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -53,39 +65,34 @@ class _HomeState extends State<Home> {
               image: AssetImage('images/background.jpg'),
             ),
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              alignment: Alignment.topCenter,
-              width: mediaQuery.width,
-              height: 200,
-              decoration: BoxDecoration(
-                  color: Color(0xFF1ebea5),
-                  borderRadius:
-                      BorderRadius.only(bottomRight: Radius.circular(48))),
-              child: Center(
-                child: Row(
-                  children: [
-                    SizedBox(width: 40),
-                    Image(
-                      image: AssetImage('images/unknown_whatsapp.png'),
-                      width: 50,
-                      color: darkAccent,
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'UnKnown Messenger',
-                        style: TextStyle(fontSize: 32, color: darkAccent),
+          CustomAppBar(
+            mediaQuery: mediaQuery,
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (c) {
+                    return AlertDialog(
+                      title: Text('About'),
+                      backgroundColor: darkAccent,
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Made using Flutter'),
+                          Text('Created By Pruthvi_Soni'),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                      actions: [
+                        FlatButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Ok'))
+                      ],
+                    );
+                  });
+            },
           ), //
           Positioned(
-            top: 240,
+            top: 250,
             width: mediaQuery.width,
             child: Column(
               children: [
@@ -97,7 +104,6 @@ class _HomeState extends State<Home> {
                       fontSize: 18,
                     ),
                     textAlign: TextAlign.center,
-                    softWrap: true,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -109,7 +115,6 @@ class _HomeState extends State<Home> {
                         setState(() {
                           _code = code.dialCode;
                         });
-                        print(_code);
                       },
                       initialSelection: 'IN',
                       favorite: ['+91', 'IN'],
@@ -130,6 +135,9 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.only(right: 18.0),
                         child: TextField(
                           controller: _number,
+                          onChanged: (value) {
+                            _num = value;
+                          },
                           keyboardType: TextInputType.number,
                           decoration: kInputDecoration.copyWith(
                               hintText: 'Enter Number Here'),
@@ -142,6 +150,9 @@ class _HomeState extends State<Home> {
                   padding: const EdgeInsets.all(18.0),
                   child: TextField(
                     controller: _message,
+                    onChanged: (value) {
+                      _msg = value;
+                    },
                     keyboardType: TextInputType.text,
                     minLines: 1,
                     maxLines: 3,
@@ -163,11 +174,12 @@ class _HomeState extends State<Home> {
                     } else if (!isInstalled) {
                       _showSnackBar('Please Install WhatsApp first!');
                     } else {
+                      insertData();
                       FlutterOpenWhatsapp.sendSingleMessage(
                           '$_code${_number.text}', '${_message.text}');
                     }
                   },
-                  color: Color(0xff1ebea5),
+                  color: greenAccent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28)),
                   child: Text(
@@ -178,31 +190,160 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+
           Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              padding: EdgeInsets.only(bottom: 10),
-              width: mediaQuery.width,
-              height: 200,
-              decoration: BoxDecoration(
-                  color: Color(0xFF1ebea5),
-                  borderRadius:
+            alignment: Alignment.center,
+            child: DraggableScrollableSheet(
+              initialChildSize: .20,
+              minChildSize: 0.20,
+              maxChildSize: .60,
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                      color: greenAccent,
+                      borderRadius:
                       BorderRadius.only(topLeft: Radius.circular(48))),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Created By: Pruthvi_Soni',
-                  style: TextStyle(
-                      color: darkAccent,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: 5),
+                      Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.only(top: 10),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.history,
+                                      color: darkAccent,
+                                    ),
+                                    Text(
+                                      "History",
+                                      style: TextStyle(color: darkAccent),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ValueListenableBuilder(
+                                  valueListenable:
+                                  Hive.box('numbers').listenable(),
+                                  builder: (_, Box box, child) {
+                                    if (box.isNotEmpty) {
+                                      return Align(
+                                        alignment: Alignment.topRight,
+                                        child: FlatButton.icon(
+                                          onPressed: () async {
+                                            await Future.delayed(
+                                                Duration(milliseconds: 100),
+                                                    () {
+                                                  setState(() {
+                                                    Hive.box('numbers').clear();
+                                                  });
+                                                });
+                                          },
+                                          icon: Icon(
+                                            Icons.clear,
+                                            color: darkAccent,
+                                          ),
+                                          label: Text(
+                                            'Clear',
+                                            style: TextStyle(color: darkAccent),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  }),
+                            ],
+                          )),
+                      Expanded(
+                        child: _listViewBuilder(scrollController),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          ),
+          )
         ],
       ),
     );
+  }
+
+  dynamic _listViewBuilder(ScrollController scrollController) {
+    return ValueListenableBuilder(
+      valueListenable: Hive.box('numbers').listenable(),
+      builder: (_, Box box, child) {
+        if (box.isNotEmpty) {
+          return ListView.builder(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: box.length,
+              itemBuilder: (_, index) {
+                final _items = box.toMap();
+                var data = _items[index];
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                      accentColor: darkAccent, primaryColor: darkAccent),
+                  child: ExpansionTile(
+                    title: Text(
+                      "${data['number']}",
+                      style: TextStyle(
+                          color: darkAccent, fontWeight: FontWeight.bold),
+                    ),
+                    expandedAlignment: Alignment.topLeft,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Message:',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: darkAccent),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          '${data['message']}' ?? "",
+                          style: TextStyle(
+                            color: darkAccent,
+                            fontSize: 20,
+                          ),
+                        ),
+                      )
+                    ],
+                    subtitle: Text(
+                      _formatDate(
+                        DateTime.parse(data['timeStamp']).toString(),
+                      ),
+                      style: TextStyle(color: darkAccent),
+                    ),
+                    childrenPadding: EdgeInsets.only(
+                        left: 15, bottom: 10, right: 10, top: 0),
+                  ),
+                );
+              });
+        }
+        return Padding(
+          padding: const EdgeInsets.only(top: 40.0),
+          child: Text(
+            'No History',
+            style: TextStyle(
+              color: darkAccent,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _formatDate(String date) {
+    return DateFormat().add_jm().format(DateTime.parse(date));
   }
 }
