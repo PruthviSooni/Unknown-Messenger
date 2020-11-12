@@ -22,11 +22,7 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  // Future<Widget> _openBox() async {
-  //   return Future.value(Hive.openBox('numbers')).then((value) => Home());
-  // }
   Future<Widget> loadFromFuture() async {
-    // <fetch data from server. ex. login>
     return Future.value(Hive.openBox('numbers')).then((value) => Home());
   }
 
