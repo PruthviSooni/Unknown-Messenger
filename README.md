@@ -50,10 +50,7 @@ List of packages are used to make this app
 
 ## Screenshots
 
-<img src="data/demo_1.jpg" width=250/>
-<img src="data/demo_2.jpg" width=250/>
-<img src="data/demo_3.jpg" width=250/>
-<img src="data/demo_4.jpg" width=250/>
+<img src="data/Demo_1.jpg" width=250> <img src="data/Demo_2.jpg" width=250> <img src="data/Demo_3.jpg" width=250> <img src="data/Demo_4.jpg" width=250> <img src="data/Demo_5.jpg" width=250>
 
 ## Creators
 
