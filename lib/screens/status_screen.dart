@@ -19,7 +19,7 @@ class StatusScreen extends StatelessWidget {
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          title: Text('My Status', style: TextStyle(color: darkAccent)),
+          title: Text('Status Saver', style: TextStyle(color: darkAccent)),
           bottom: TabBar(
             indicatorColor: darkAccent,
             tabs: [

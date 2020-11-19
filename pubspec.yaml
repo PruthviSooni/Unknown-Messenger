@@ -15,6 +15,7 @@ dependencies:
 
   ############################
   # Plugins
+  intl:
   flutter_open_whatsapp: ^0.1.2
   country_code_picker: ^1.6.2
   device_apps: ^1.2.0
@@ -24,10 +25,12 @@ dependencies:
   timeago: ^2.0.28
   gallery_saver: ^2.0.1
   share: ^0.6.5+4
+  flutter_staggered_grid_view: ^0.3.2
+  video_player:
+  better_player: ^0.0.33
   # DB Plugins
   hive:
   hive_flutter:
-  intl:
 
 dev_dependencies:
   flutter_test:

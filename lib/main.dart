@@ -29,7 +29,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
-      seconds: 3,
+      seconds: 2,
       navigateAfterSeconds: Home(),
       routeName: Home.routeName,
       image: Image.asset(

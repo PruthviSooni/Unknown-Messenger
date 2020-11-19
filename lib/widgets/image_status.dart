@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:share/share.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:unknown_messenger/utils/constants.dart';
-
-Directory path = Directory('/storage/emulated/0/WhatsApp/Media/.Statuses');
+import 'package:unknown_messenger/widgets/status_images.dart';
 
 class StatusImages extends StatelessWidget {
   @override
@@ -19,62 +17,24 @@ class StatusImages extends StatelessWidget {
           )
           .toList();
       if (list.length > 0) {
-        return ListView.builder(
-            itemCount: list.length,
+        return StaggeredGridView.countBuilder(
             physics: BouncingScrollPhysics(),
+            crossAxisCount: 2,
+            itemCount: list.length,
             itemBuilder: (ctx, index) {
-              String albumName = 'Media';
               var imagePath = list[index];
-              return Card(
-                  margin: EdgeInsets.all(18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Stack(
-                        children: [
-                          Image.file(
-                            File(imagePath),
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            width: MediaQuery.of(context).size.width,
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: darkAccent.withOpacity(.9),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      print(imagePath);
-                                      GallerySaver.saveImage(imagePath)
-                                          .then((value) => print('saved'));
-                                    },
-                                    icon: Icon(Icons.file_download),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      Share.share(imagePath)
-                                          .then((value) => print('shared'));
-                                    },
-                                    icon: Icon(Icons.share),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      )));
-            });
+              return Images(
+                imagePath: imagePath,
+              );
+            },
+            crossAxisSpacing: 4,
+            mainAxisSpacing: 4,
+            shrinkWrap: true,
+            staggeredTileBuilder: (int index) =>
+                new StaggeredTile.count(1, index.isEven ? 2 : 1));
       }
       return Center(
-        child: Text('WhatsApp is not Installed!'),
+        child: Text('No Status Images Found'),
       );
     } else {
       return Container();

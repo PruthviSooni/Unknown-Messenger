@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 var darkAccent = Color(0xff273443);
 var greenAccent = Color(0xff1ebea5);
+Directory path = Directory('/storage/emulated/0/WhatsApp/Media/.Statuses');
 var kInputDecoration = InputDecoration(
     hintText: "Enter Number Here",
     fillColor: darkAccent,

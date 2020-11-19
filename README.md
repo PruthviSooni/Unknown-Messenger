@@ -4,7 +4,7 @@
   </a>
   <h3 align="center">Unknown Messenger</h3>
   <p align="center">
-    Unknown Messenger app with Flutter that use to send message to number which is not saved in contact list of whatsApp
+    Unknown Messenger app with Flutter that use to send message to number which is not saved in contact list of WhatsApp
     <br>
     <!-- <a href="https://github.com/Ismaestro/flutter-example-app/issues/new">Report bug</a>
     ·
@@ -17,8 +17,9 @@
 - [Table of contents](#table-of-contents)
 - [Quick start](#quick-start)
 - [What's included](#whats-included)
-- [Firebase](#firebase)
-- [Demo](#demo)
+- [Hive](#hive)
+- [Packages](#packages)
+- [Screenshots](#screenshots)
 - [Creators](#creators)
 - [Thanks!](#thanks)
 
@@ -29,29 +30,30 @@ This is a normal flutter app. You should follow the instructions in the [officia
 ## What's included
 
 - Check weather WhatsApp is install or Not
-- Search Country Code
 - Attractive UI
-- CRUD with firesotre!
+- Search Country Code
+- CRUD with HIVE!
+- Show History of Numbers
+- Clear History
+- Saved Images and Videos in Gallery
+- Share Images and Videos
 
-## Firebase
+## Hive
 
-This repo is using Firebase. We use Cloud Firestore to save the history of the number that is sent by user in the app and show in an sequential manner.
+This repo is using Hive (noSQL, Persistence DB) to save data locally on user device for security reason, It shows the list of entered number by user with message and time when message sent.
 
-<!-- ### Travis CI
+## Packages
 
-We use Travis CI to run this tasks in order:
-* Linter
-* Tests
-* Build for production -->
+List of packages are used to make this app
 
-<!-- ## Bugs and feature requests
+<img src="data/packages.png" height=300/>
 
-Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/Ismaestro/flutter-example-app/blob/master/CONTRIBUTING.md) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/Ismaestro/flutter-example-app/issues/new). -->
+## Screenshots
 
-## Demo
-
-<img src="data/demo.gif" width=250/><br>
-In-Progress...
+<img src="data/demo_1.jpg" width=250/>
+<img src="data/demo_2.jpg" width=250/>
+<img src="data/demo_3.jpg" width=250/>
+<img src="data/demo_4.jpg" width=250/>
 
 ## Creators
 
