@@ -176,7 +176,7 @@ class _HomeState extends State<Home> {
                     FlatButton(
                       onPressed: () async {
                         bool isInstalled =
-                        await DeviceApps.isAppInstalled('com.whatsapp');
+                            await DeviceApps.isAppInstalled('com.whatsapp');
                         if (_number.text.isEmpty && _message.text.isEmpty) {
                           _showSnackBar('Please enter Number and Message');
                         } else if (_number.text.length < 10) {
