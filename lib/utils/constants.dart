@@ -13,3 +13,11 @@ var kInputDecoration = InputDecoration(
       borderRadius: BorderRadius.circular(28),
       borderSide: BorderSide(width: 0),
     ));
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}

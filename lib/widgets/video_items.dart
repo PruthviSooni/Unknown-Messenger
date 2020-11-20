@@ -18,9 +18,8 @@ class VideoItems extends StatefulWidget {
 }
 
 class _VideoItemsState extends State<VideoItems> {
-  BetterPlayerController _controller;
-
-  bool _showControl = true;
+  BetterPlayerController _controller, _controller_2;
+  bool mounted= false;
 
   @override
   void initState() {
@@ -38,92 +37,104 @@ class _VideoItemsState extends State<VideoItems> {
         fit: BoxFit.fitWidth,
         fullScreenByDefault: false,
         controlsConfiguration: BetterPlayerControlsConfiguration(
-          enableFullscreen: false,
-          enableOverflowMenu: false,
-          enableSkips: false,
-          showControls: _showControl,
-          enablePlaybackSpeed: false,
-          enableProgressBar: false,
-          controlBarColor: darkAccent,
+          showControls: false,
         ),
       ),
       betterPlayerDataSource: _dataSource,
     );
-    bool _isPlaying = await _controller.isPlaying();
-    _controller.addEventsListener((event) {
-      if (_isPlaying) {
-        setState(() {
-          _showControl = true;
-        });
-      } else {
-        setState(() {
-          _showControl = false;
-        });
-      }
-    });
-  }
+     _controller_2 = BetterPlayerController(
+      BetterPlayerConfiguration(
+        fit: BoxFit.fitWidth,
+        aspectRatio: 10 / 16,
+        fullScreenByDefault: false,
+        controlsConfiguration: BetterPlayerControlsConfiguration(
+          enableSkips: false,
+          enableFullscreen: false,
+          enableOverflowMenu: false,
+        ),
+      ),
+      betterPlayerDataSource: _dataSource,
+    );
+     }
+  
+ 
 
   @override
   void dispose() {
     _controller.dispose();
+    _controller_2.dispose();
     super.dispose();
-  }
-
-  _isPlaying() async {}
-
-  @override
-  void didChangeDependencies() {
-    _isPlaying();
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        color: darkAccent,
-        elevation: 5,
-        child: AspectRatio(
-          aspectRatio: 16 / 10,
-          child: Column(
-            children: [
-              Flexible(
+    return InkWell(
+      onTap: () {
+        initController();
+        showModalBottomSheet(
+            builder: (ctx) {
+              return AspectRatio(
+                aspectRatio: 10 / 16,
                 child: BetterPlayer(
-                  controller: _controller,
+                  controller: _controller_2,
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Share.shareFiles(
-                            [widget.file.path],
-                          ).catchError((e) => print(e));
-                        },
-                        icon: Icon(Icons.share)),
-                    IconButton(
-                        onPressed: () async {
-                          GallerySaver.saveVideo(
-                            widget.file.path,
-                          )
-                              .then((value) => Scaffold.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Text(
-                                          'Video is Saved in Gallery/Movies'))))
-                              .catchError((e) => print(e));
-                        },
-                        icon: Icon(Icons.download_rounded)),
-                  ],
+              );
+            },
+            context: context);
+      },
+      child: Card(
+          color: darkAccent,
+          elevation: 5,
+          child: AspectRatio(
+            aspectRatio: 16 / 10,
+            child: Column(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: BetterPlayer(
+                    controller: _controller,
+                  ),
                 ),
-              )
-            ],
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Share.shareFiles(
+                              [widget.file.path],
+                            ).catchError((e) => print(e));
+                          },
+                          icon: Icon(Icons.share)),
+                      IconButton(
+                          onPressed: () async {
+                            GallerySaver.saveVideo(
+                              widget.file.path,
+                            )
+                                .then((value) =>
+                                    Scaffold.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Video is Saved in Gallery/Movies',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: darkAccent,
+                                      ),
+                                    ))
+                                .catchError((e) => print(e));
+                          },
+                          icon: Icon(Icons.download_rounded)),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+          // : Center(
+          //     child: CircularProgressIndicator(),
+          //   ),
           ),
-        )
-        // : Center(
-        //     child: CircularProgressIndicator(),
-        //   ),
-        );
+    );
   }
 }

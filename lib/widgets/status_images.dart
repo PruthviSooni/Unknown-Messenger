@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:share/share.dart';
 import 'package:unknown_messenger/utils/constants.dart';
 
@@ -45,16 +46,17 @@ class Images extends StatelessWidget {
                         children: [
                           IconButton(
                             onPressed: () async {
-                              var file = await File(imagePath).lastModified();
-                              print(file.toString());
-                              // GallerySaver.saveImage(imagePath).then((value) {
-                              //   Scaffold.of(context).showSnackBar(
-                              //     SnackBar(
-                              //       content: Text(
-                              //           'Image is saved in Gallery/Pictures.'),
-                              //     ),
-                              //   );
-                              // }).catchError((e) => print(e));
+                              GallerySaver.saveImage(imagePath).then((value) {
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Image is saved in Gallery/Pictures.',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    backgroundColor: darkAccent,
+                                  ),
+                                );
+                              }).catchError((e) => print(e));
                             },
                             icon: Icon(Icons.file_download),
                           ),

@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
   Map<Permission, PermissionStatus> status;
   String _code = '+91';
   String _msg, _num;
+  bool expand = false;
 
   Future _getFile() async {
     final path = Directory('/storage/emulated/0/WhatsApp/Media/.Statuses');
@@ -65,7 +66,7 @@ class _HomeState extends State<Home> {
       ),
       applicationLegalese: 'By Pruthvi Soni',
       applicationName: "Unknown Messenger",
-      applicationVersion: "Version 1.5.0",
+      applicationVersion: "Version 2.0.0",
     );
   }
 
@@ -101,7 +102,7 @@ class _HomeState extends State<Home> {
             onPressed: () => _showDialog(context),
           ), //
           Positioned(
-            top: 250,
+            top: mediaQuery.height / 3.6,
             width: mediaQuery.width,
             child: Column(
               children: [
@@ -128,13 +129,14 @@ class _HomeState extends State<Home> {
                       initialSelection: 'IN',
                       favorite: ['+91', 'IN'],
                       // backgroundColor: darkAccent,
-                      dialogTextStyle: TextStyle(color: darkAccent),
+                      dialogTextStyle: TextStyle(color: Colors.white),
+                      textStyle: TextStyle(color: Colors.white),
                       searchStyle: TextStyle(color: darkAccent),
-                      searchDecoration: InputDecoration(
-                          fillColor: darkAccent,
-                          hintText: 'Search Country',
-                          enabledBorder: UnderlineInputBorder(),
-                          border: UnderlineInputBorder()),
+                      boxDecoration: BoxDecoration(
+                        color: darkAccent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      searchDecoration: kInputDecoration.copyWith(hintText: "Search Country"),
                       showCountryOnly: false,
                       showOnlyCountryWhenClosed: false,
                       alignLeft: false,
@@ -181,7 +183,7 @@ class _HomeState extends State<Home> {
                           _showSnackBar('Please enter Number and Message');
                         } else if (_number.text.length < 10) {
                           _showSnackBar("Enter valid number");
-                        } else if (_message.text.length < 5) {
+                        } else if (_message.text.length < 1) {
                           _showSnackBar('Message length should be 5 letters');
                         } else if (!isInstalled) {
                           _showSnackBar('Please Install WhatsApp first!');
@@ -225,77 +227,86 @@ class _HomeState extends State<Home> {
 
           Align(
             alignment: Alignment.center,
-            child: DraggableScrollableSheet(
-              initialChildSize: .20,
-              minChildSize: 0.20,
-              maxChildSize: .60,
-              builder: (context, scrollController) {
-                return Container(
-                  decoration: BoxDecoration(
-                      color: greenAccent,
-                      borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(48))),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: 5),
-                      Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(top: 10),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.history,
-                                      color: darkAccent,
-                                    ),
-                                    Text(
-                                      "History",
-                                      style: TextStyle(color: darkAccent),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ValueListenableBuilder(
-                                  valueListenable:
-                                  Hive.box('numbers').listenable(),
-                                  builder: (_, Box box, child) {
-                                    if (box.isNotEmpty) {
-                                      return Align(
-                                        alignment: Alignment.topRight,
-                                        child: FlatButton.icon(
-                                          onPressed: () async {
-                                            await Future.delayed(
-                                                Duration(milliseconds: 100),
-                                                    () {
-                                                  setState(() {
-                                                    Hive.box('numbers').clear();
-                                                  });
-                                                });
-                                          },
-                                          icon: Icon(
-                                            Icons.clear,
-                                            color: darkAccent,
-                                          ),
-                                          label: Text(
-                                            'Clear',
-                                            style: TextStyle(color: darkAccent),
-                                          ),
+            child: ValueListenableBuilder(
+              valueListenable: Hive.box('numbers').listenable(),
+              builder: (_, Box box, Widget __) {
+                return DraggableScrollableSheet(
+                  minChildSize: 0.20,
+                  maxChildSize: .60,
+                  initialChildSize: .2,
+                  builder: (context, scrollController) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          color: greenAccent,
+                          borderRadius:
+                              BorderRadius.only(topLeft: Radius.circular(48))),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(height: 5),
+                          Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.only(top: 10),
+                              child: ScrollConfiguration(
+                                behavior: MyBehavior(),
+                                child: SingleChildScrollView(
+                                  controller: scrollController,
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            Icon(
+                                              Icons.history,
+                                              color: darkAccent,
+                                            ),
+                                            Text(
+                                              "History",
+                                              style:
+                                                  TextStyle(color: darkAccent),
+                                            ),
+                                          ],
                                         ),
-                                      );
-                                    } else {
-                                      return Container();
-                                    }
-                                  }),
-                            ],
-                          )),
-                      Expanded(
-                        child: _listViewBuilder(scrollController),
+                                      ),
+                                      box.isNotEmpty
+                                          ? Container(
+                                              margin: EdgeInsets.only(left: 15),
+                                              alignment: Alignment.topLeft,
+                                              child: FlatButton.icon(
+                                                onPressed: () async {
+                                                  await Future.delayed(
+                                                      Duration(
+                                                          milliseconds: 100),
+                                                      () {
+                                                    setState(() {
+                                                      Hive.box('numbers')
+                                                          .clear();
+                                                    });
+                                                  });
+                                                },
+                                                icon: Icon(
+                                                  Icons.clear,
+                                                  color: darkAccent,
+                                                ),
+                                                label: Text(
+                                                  'Clear',
+                                                  style: TextStyle(
+                                                      color: darkAccent),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                ),
+                              )),
+                          Expanded(
+                            child: _listViewBuilder(scrollController),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 );
               },
             ),
@@ -333,8 +344,7 @@ class _HomeState extends State<Home> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Message:',
-                          style: Theme
-                              .of(context)
+                          style: Theme.of(context)
                               .textTheme
                               .headline6
                               .copyWith(color: darkAccent),
@@ -344,13 +354,9 @@ class _HomeState extends State<Home> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           '${data['message']}' ?? "",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .subtitle1
-                              .copyWith(
-                            color: darkAccent,
-                          ),
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                color: darkAccent,
+                              ),
                         ),
                       )
                     ],
@@ -383,3 +389,40 @@ class _HomeState extends State<Home> {
     return DateFormat().add_jm().format(DateTime.parse(date));
   }
 }
+//
+//
+// if (box.isNotEmpty) {
+// return Align
+// (
+// alignment: Alignment.topLeft,child: FlatButton.icon(onPressed: (
+// )
+// async {await
+// Future.delayed(Duration
+// (
+// milliseconds: 100),
+// () {
+// setState(() {
+// Hive.box('numbers').clear();
+// });
+// });
+// }
+// ,
+// icon: Icon
+// (
+// Icons.clear,color: darkAccent,)
+// ,
+// label: Text
+// ('Clear
+// '
+// ,
+// style: TextStyle
+// (
+// color: darkAccent),
+// )
+// ,
+// )
+// ,
+// );
+// } else {
+// return Container();
+// }

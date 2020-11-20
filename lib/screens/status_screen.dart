@@ -47,6 +47,7 @@ class StatusScreen extends StatelessWidget {
           backgroundColor: Theme.of(context).accentColor.withOpacity(.8),
         ),
         body: TabBarView(
+          physics: BouncingScrollPhysics(),
           children: [
             StatusImages(),
             StatusVideos(),
