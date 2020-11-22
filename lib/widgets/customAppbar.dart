@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:unknown_messenger/utils/constants.dart';
 
@@ -32,20 +33,35 @@ class CustomAppBar extends StatelessWidget {
                       color: darkAccent,
                     )),
                     onPressed: onPressed)),
-            Align(
-              alignment: Alignment.center,
-              child: Image(
-                image: AssetImage('images/unknown_whatsapp.png'),
-                width: 50,
-                color: darkAccent,
+            Container(
+              margin: EdgeInsets.only(left: 50),
+              alignment: Alignment.centerLeft,
+              child: AvatarGlow(
+                endRadius: 60,
+                glowColor: darkAccent,
+                repeat: true,
+                showTwoGlows: true,
+                child: Material(
+                  elevation: 8.0,
+                  shape: CircleBorder(),
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xff1ebea5),
+                    child: Image.asset(
+                      'images/unknown_whatsapp.png',
+                      height: 50,
+                    ),
+                    radius: 40.0,
+                  ),
+                ),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 20),
-              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(left: 60, top: 15),
+              alignment: Alignment.center,
               child: Text(
-                'UnKnown Messenger',
-                style: TextStyle(fontSize: 32, color: darkAccent),
+                'Unknown\nMessenger',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 28, color: darkAccent),
               ),
             ),
           ],

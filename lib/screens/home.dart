@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,12 +32,13 @@ class _HomeState extends State<Home> {
 
   Future _getFile() async {
     final path = Directory('/storage/emulated/0/WhatsApp/Media/.Statuses');
-    path.exists().then((exists) {
-      exists ? print(path.path) : print('not exists!');
-    });
+    // path.exists().then((exists) {
+    //   exists ? print(path.path) : print('not exists!');
+    // });
   }
 
   _showSnackBar(msg) {
+    // ignore: deprecated_member_use
     _key.currentState.showSnackBar(SnackBar(
       content: Text(
         msg,
@@ -136,7 +137,8 @@ class _HomeState extends State<Home> {
                         color: darkAccent,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      searchDecoration: kInputDecoration.copyWith(hintText: "Search Country"),
+                      searchDecoration:
+                          kInputDecoration.copyWith(hintText: "Search Country"),
                       showCountryOnly: false,
                       showOnlyCountryWhenClosed: false,
                       alignLeft: false,
@@ -358,11 +360,18 @@ class _HomeState extends State<Home> {
                                 color: darkAccent,
                               ),
                         ),
-                      )
+                      ),
+                      Container(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          _formatDate(data['timeStamp']),
+                          style: TextStyle(color: darkAccent),
+                        ),
+                      ),
                     ],
                     subtitle: Text(
-                      _formatDate(
-                        DateTime.parse(data['timeStamp']).toString(),
+                      timeago.format(
+                        DateTime.parse(data['timeStamp']),
                       ),
                       style: TextStyle(color: darkAccent),
                     ),
@@ -386,43 +395,6 @@ class _HomeState extends State<Home> {
   }
 
   String _formatDate(String date) {
-    return DateFormat().add_jm().format(DateTime.parse(date));
+    return DateFormat.yMMMd().add_jm().format(DateTime.parse(date));
   }
 }
-//
-//
-// if (box.isNotEmpty) {
-// return Align
-// (
-// alignment: Alignment.topLeft,child: FlatButton.icon(onPressed: (
-// )
-// async {await
-// Future.delayed(Duration
-// (
-// milliseconds: 100),
-// () {
-// setState(() {
-// Hive.box('numbers').clear();
-// });
-// });
-// }
-// ,
-// icon: Icon
-// (
-// Icons.clear,color: darkAccent,)
-// ,
-// label: Text
-// ('Clear
-// '
-// ,
-// style: TextStyle
-// (
-// color: darkAccent),
-// )
-// ,
-// )
-// ,
-// );
-// } else {
-// return Container();
-// }

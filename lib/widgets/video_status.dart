@@ -14,7 +14,6 @@ class StatusVideos extends StatelessWidget {
           .where((element) => element.endsWith('.mp4'))
           .toList();
       if (videoList.length > 0) {
-        print(videoList);
         return ListView.builder(
             itemCount: videoList.length,
             physics: BouncingScrollPhysics(),
