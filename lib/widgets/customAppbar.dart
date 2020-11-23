@@ -34,34 +34,42 @@ class CustomAppBar extends StatelessWidget {
                     )),
                     onPressed: onPressed)),
             Container(
-              margin: EdgeInsets.only(left: 50),
-              alignment: Alignment.centerLeft,
-              child: AvatarGlow(
-                endRadius: 60,
-                glowColor: darkAccent,
-                repeat: true,
-                showTwoGlows: true,
-                child: Material(
-                  elevation: 8.0,
-                  shape: CircleBorder(),
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xff1ebea5),
-                    child: Image.asset(
-                      'images/unknown_whatsapp.png',
-                      height: 50,
-                    ),
-                    radius: 40.0,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 60, top: 15),
+              height: mediaQuery.height,
               alignment: Alignment.center,
-              child: Text(
-                'Unknown\nMessenger',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 28, color: darkAccent),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: AvatarGlow(
+                      endRadius: 60,
+                      glowColor: darkAccent,
+                      repeat: true,
+                      animate: true,
+                      child: Material(
+                        elevation: 8.0,
+                        shape: CircleBorder(),
+                        child: CircleAvatar(
+                          backgroundColor: Color(0xff1ebea5),
+                          child: Image.asset(
+                            'images/unknown_whatsapp.png',
+                            height: 50,
+                          ),
+                          radius: 40.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      'Unknown Messenger',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          .copyWith(color: darkAccent),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

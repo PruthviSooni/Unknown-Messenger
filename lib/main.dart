@@ -9,7 +9,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
-  Hive.isAdapterRegistered(0);
   await Hive.openBox('numbers');
   runApp(
     MaterialApp(
@@ -22,10 +21,6 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  Future<Widget> loadFromFuture() async {
-    return Future.value(Hive.openBox('numbers')).then((value) => Home());
-  }
-
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
